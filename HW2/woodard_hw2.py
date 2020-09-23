@@ -1,3 +1,6 @@
+#Darrian Woodard
+#1593984
+
 user_bday = str(input())
 
 #month to number dictionary
