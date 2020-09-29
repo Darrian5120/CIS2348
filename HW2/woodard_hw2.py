@@ -1,6 +1,29 @@
 #Darrian Woodard
 #1593984
 
+def calc_bday(user_bday):
+    #Extract data from string
+    month = user_bday.find(' ', 0)
+    monthNum = user_bday[0:month]
+
+    day = user_bday.find(',', month)
+    dayNum = user_bday[month+1:day]
+
+    last_int = month + day
+
+    yearNum = user_bday[day+2:last_int]
+
+    month_int = 0
+
+    #change month string to int
+    for month_num, month_str in month_dict.items():
+        if month_str == monthNum:
+            month_int = month_num
+
+    print('{}/{}/{}'.format(month_int, dayNum, yearNum))
+
+
+
 user_bday = str(input())
 
 #month to number dictionary
@@ -18,22 +41,17 @@ month_dict = {1: 'January',
               12: 'December'
               }
 
-#Extract data from string
-month = user_bday.find(' ', 0)
-monthNum = user_bday[0:month]
 
-day = user_bday.find(',', month)
-dayNum = user_bday[month+1:day]
+myDates = open('inputDates.txt')
+contents = myDates.readlines()
+myDates.close()
 
-last_int = month + day
+calc_bday(user_bday)
 
-yearNum = user_bday[day+2:last_int]
-
-month_int = 0
-
-#change month string to int
-for month_num, month_str in month_dict.items():
-    if month_str == monthNum:
-        month_int = month_num
-
-print('{}/{}/{}'.format(month_int, dayNum, yearNum))
+for line in contents:
+    if contents == "-":
+        print("-1")
+    elif "/" in contents:
+        print("")
+    else:
+        calc_bday(contents[line])
