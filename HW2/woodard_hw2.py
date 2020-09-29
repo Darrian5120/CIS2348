@@ -1,6 +1,9 @@
 #Darrian Woodard
 #1593984
+import re
 
+
+#Function to make changes to the date
 def calc_bday(user_bday):
     #Extract data from string
     month = user_bday.find(' ', 0)
@@ -11,19 +14,20 @@ def calc_bday(user_bday):
 
     last_int = month + day
 
-    yearNum = user_bday[day+2:last_int]
+    yearNum = user_bday[day+2:last_int+1000]
 
-    month_int = 0
+    #month_int = 0
 
     #change month string to int
-    for month_num, month_str in month_dict.items():
-        if month_str == monthNum:
-            month_int = month_num
+    for key, value in month_dict.items():
+        if value == monthNum:
+            #month_int = key
+            return '{}/{}/{}'.format(key, dayNum, yearNum)
 
-    print('{}/{}/{}'.format(month_int, dayNum, yearNum))
+    return ''
 
 
-
+   
 user_bday = str(input())
 
 #month to number dictionary
@@ -41,17 +45,19 @@ month_dict = {1: 'January',
               12: 'December'
               }
 
-
-myDates = open('inputDates.txt')
+myDates = open('C:/Users/darri/PycharmProjects/CIS2348/HW2/inputDates.txt', 'r')
 contents = myDates.readlines()
 myDates.close()
 
-calc_bday(user_bday)
+#r = re.compile("\\S \\d, \\d")
+#if r.match(user_bday) is not None:
+print(calc_bday(user_bday), '\n')
 
-for line in contents:
-    if contents == "-":
-        print("-1")
-    elif "/" in contents:
-        print("")
-    else:
-        calc_bday(contents[line])
+with open('C:/Users/darri/PycharmProjects/CIS2348/HW2/parsedDates.txt', 'a') as printedDates:
+    for line in range(len(contents)):
+        if '/' in contents[line] or '-' in contents[line] or '.' in contents[line]:
+            -1
+        else:
+        #if r.match(contents[line]) is not None:
+            print(calc_bday(contents[line]), end='')
+            printedDates.write(calc_bday(contents[line]))
