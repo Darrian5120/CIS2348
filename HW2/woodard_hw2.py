@@ -27,8 +27,10 @@ def calc_bday(user_bday):
     return ''
 
 
-   
+#user input file name
+user_file = str(input()) #FOR GRADER USE
 user_bday = str(input())
+
 
 #month to number dictionary
 month_dict = {1: 'January',
@@ -49,13 +51,14 @@ myDates = open('C:/Users/darri/PycharmProjects/CIS2348/HW2/inputDates.txt', 'r')
 contents = myDates.readlines()
 myDates.close()
 
+# use regex to format input string fixme
 #r = re.compile("\\S \\d, \\d")
 #if r.match(user_bday) is not None:
 print(calc_bday(user_bday), '\n')
 
-with open('C:/Users/darri/PycharmProjects/CIS2348/HW2/parsedDates.txt', 'a') as printedDates:
+with open('C:/Users/darri/PycharmProjects/CIS2348/HW2/parsedDates.txt', 'a') as printedDates: #grader enter user_file for input
     for line in range(len(contents)):
-        if '/' in contents[line] or '-' in contents[line] or '.' in contents[line]:
+        if '/' in contents[line] or '-' in contents[line] or '.' in contents[line]: #alternative to regex
             -1
         else:
         #if r.match(contents[line]) is not None:
