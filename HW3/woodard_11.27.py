@@ -15,6 +15,7 @@ def menu(player_stuff, od):
 
     command = ''
 
+
     while(command != 'q'):
         print(menu, end='\n')
         command = input('Choose an option:\n')
