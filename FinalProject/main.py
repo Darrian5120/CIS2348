@@ -10,6 +10,7 @@ import pandas
 import pandas as pd
 import numpy as np
 from collections import defaultdict
+import pprint
 
 # Class for items
 class Items:
@@ -29,14 +30,13 @@ class Items:
     # Print object as a string
     def __repr__(self):
         return f"""
-        ************************\n
-        ID: {self.item_id}\n
-        Manufacturer: {self.manfac_name}\n
-        Type: {self.item_type} \n
-        Damage: {self.damage}\n
-        Price: ${self.price}\n 
-        Service Date: {self.date}\n        
-        ************************"""
+        ID: {self.item_id}
+        Manufacturer: {self.manfac_name}
+        Type: {self.item_type} 
+        Damage: {self.damage}
+        Price: ${self.price}
+        Service Date: {self.date}    
+        """
     
 
 """ def concatenate(indir="C:\\Users\\darri\\PycharmProjects\\CIS2348\\FinalProject\\InputFiles", outfile="FullInventory.csv"):
@@ -168,7 +168,14 @@ if __name__ == "__main__":
             if (objs[i].item_id == dates[0][j]):
                 objs[i].date = dates[1][j]
 
-    print(objs)
+    # Add all object to dictionary values
+    for key in item_dict:
+        for i in range(lines):
+            if (key == objs[i].item_id):
+                item_dict[key] = objs[i]
+    pprint.pprint(item_dict)
+    
+    
 
     
     
