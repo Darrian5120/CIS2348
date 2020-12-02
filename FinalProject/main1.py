@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 from collections import defaultdict
 import pprint
+import datetime
 from datetime import date
 import operator
 
@@ -25,16 +26,16 @@ class Items:
         {self.item_id}, {self.manfac_name}, {self.item_type}, {self.damage} ${self.price}, {self.date}    
         """
 
-def read_in():
+def read_in(x, item):
     reader = csv.reader(f, delimiter=',') # read rows into a dictionary format
     row_num = 1
     for row in reader:
-        prices.append(row)
+        x.append(row)
         row_num+=1
     for i in range(lines):
         for j in range(lines):
-            if (item[i][0] == prices[j][0]):
-                item[i].append(prices[j][1])
+            if (item[i][0] == x[j][0]):
+                item[i].append(x[j][1])
 
 if __name__ == "__main__":
     lines = 0
@@ -45,50 +46,43 @@ if __name__ == "__main__":
     prices = []
     dates = []
 
-    #create list of lists
-    with open('ManufacturerList.csv') as f:
+##################### Create list of lists ########################
+    with open('ManufacturerList.csv','r') as f:
         reader = csv.reader(f, delimiter=',') # read rows into a dictionary format
         row_num = 1
         for row in reader:
             item.append(row)
             row_num+=1
 
-    with open('PriceList.csv') as f:
-        reader = csv.reader(f, delimiter=',') # read rows into a dictionary format
-        row_num = 1
-        for row in reader:
-            prices.append(row)
-            row_num+=1
-        for i in range(lines):
-            for j in range(lines):
-                if (item[i][0] == prices[j][0]):
-                    item[i].append(prices[j][1])
+    with open('PriceList.csv','r') as f:
+        read_in(prices, item)
 
-    with open('ServiceDatesList.csv') as f:
-        reader = csv.reader(f, delimiter=',') # read rows into a dictionary format
-        row_num = 1
-        for row in reader:
-            dates.append(row)
-            row_num+=1
-        for i in range(lines):
-            for j in range(lines):
-                if (item[i][0] == dates[j][0]):
-                    item[i].append(dates[j][1])
+    with open('ServiceDatesList.csv','r') as f:
+        read_in(dates, item)
 
     finalized_items = sorted(item, key =lambda l:l[1], reverse=False)
     
-    # Create full inventory CSV file
+#################### Create full inventory CSV file ####################
     with open('FullInventory.csv', 'w', newline='') as f:
         write = csv.writer(f)
         write.writerows(finalized_items)
 
-    # Create past service Inventory CSV file
-    today = date.today()
+################## Create past service Inventory CSV file ####################
+    past = []
+    d1 = datetime.datetime.now()
+    for i in range(lines):
+        if (datetime.datetime.strptime(finalized_items[i][5],'%m/%d/%Y')<d1):
+            past.append(finalized_items[i])
+
     with open('PastServiceDateInventory.csv', 'w', newline='') as f:
-        None
+        write = csv.writer(f)
+        write.writerows(past)
+
+    
+    
 
 
-    # create class objects
+#################### create class objects ####################
     objs = list()
     for i in range(lines):
         objs.append(Items())
@@ -101,7 +95,7 @@ if __name__ == "__main__":
         objs[i].price = int(finalized_items[i][4])
         objs[i].date = finalized_items[i][5]
 
-    # create dicitonary with keys as item_id and values as class objects
+    ## create dicitonary with keys as item_id and values as class objects ##
     item_dict = {}
     for i in range(lines):
         item_dict[objs[i].item_id] = None
@@ -110,4 +104,3 @@ if __name__ == "__main__":
             if (key == objs[i].item_id):
                 item_dict[key] = objs[i] 
 
-    print(item_dict)
