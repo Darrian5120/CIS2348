@@ -27,7 +27,7 @@ def read_in(x, item):
         x.append(row)
         row_num+=1
     for i in range(lines):
-        for j in range(lines):
+        for j in range(lines): #if prices or dates missing change lines to range(len(x))
             if (item[i][0] == x[j][0]):
                 item[i].append(x[j][1])
 
@@ -110,14 +110,6 @@ if __name__ == "__main__":
             write = csv.writer(f)
             write.writerows(fullFiles[i])
 
-
-
-
-
-
-
-
-
 #################### create class objects ######################################
     objs = list()
     for i in range(lines):
@@ -139,4 +131,38 @@ if __name__ == "__main__":
         for i in range(lines):
             if (key == objs[i].item_id):
                 item_dict[key] = objs[i] 
+
+############################### Menu ###########################################
+    command = ''
+    while(command != 'q'):
+        manfac_type = str(input('Enter manufacturer or q to quit:\n'))
+        if (manfac_type == 'q'):
+            command = 'q'
+            break
+        user_list = manfac_type.split()
+        user_list = user_list[-2:]
+        
+        user_items = [] # list ofr all items with matching manfac & type
+        service_check = [] # list of items with no service past due
+        in_inv = False
+        for value in item_dict.values():
+            if ((value.manfac_name.lower() == user_list[0].lower()) and (value.item_type.lower() == user_list[1].lower())):
+                in_inv = True
+                user_items.append(value)
+        print('All items {}'.format(user_items))
+        if (in_inv == False):
+            print('No such item in inventory')
+        elif (in_inv == True):
+            for i in range(len(user_items)):
+                if ((datetime.strptime(user_items[i].date,'%m/%d/%Y')>d1) and user_items[i].damage == ''): # may have to change .date to [4]
+                    service_check.append(user_items[i])
+        print('All service items {}'.format(service_check))   
+        most_expensive = service_check[0]
+        for i in range(len(service_check[0:-1])):
+            if (service_check[i].price > service_check[i+1].price):
+                most_expensive = service_check[i]
+        print('most_expensive {}'.format(most_expensive))
+        
+        print('Your item is: {}'.format(most_expensive))
+
 
