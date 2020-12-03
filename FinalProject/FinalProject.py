@@ -135,34 +135,45 @@ if __name__ == "__main__":
 ############################### Menu ###########################################
     command = ''
     while(command != 'q'):
-        manfac_type = str(input('Enter manufacturer or q to quit:\n'))
+        manfac_type = str(input('Enter manufacturer and item type or enter q to quit:\n'))
         if (manfac_type == 'q'):
             command = 'q'
             break
         user_list = manfac_type.split()
-        user_list = user_list[-2:]
+        user_list = user_list[-2:] # ignore extra words
         
         user_items = [] # list ofr all items with matching manfac & type
         service_check = [] # list of items with no service past due
         in_inv = False
+        # check for matching values and add them to new list of matching values
         for value in item_dict.values():
             if ((value.manfac_name.lower() == user_list[0].lower()) and (value.item_type.lower() == user_list[1].lower())):
                 in_inv = True
                 user_items.append(value)
-        print('All items {}'.format(user_items))
         if (in_inv == False):
             print('No such item in inventory')
-        elif (in_inv == True):
+            continue # jump back to top of loop
+        #add to new list wtih no past service dates or damage
+        elif (in_inv == True): 
             for i in range(len(user_items)):
                 if ((datetime.strptime(user_items[i].date,'%m/%d/%Y')>d1) and user_items[i].damage == ''): # may have to change .date to [4]
                     service_check.append(user_items[i])
-        print('All service items {}'.format(service_check))   
+
+        # find most expensive item
         most_expensive = service_check[0]
         for i in range(len(service_check[0:-1])):
             if (service_check[i].price > service_check[i+1].price):
                 most_expensive = service_check[i]
-        print('most_expensive {}'.format(most_expensive))
-        
-        print('Your item is: {}'.format(most_expensive))
+        print('Your item is: {}'.format(most_expensive)) # display most expensive item
+
+        # find items with same types diff manfac, no damage, and good service
+        similar_items = []
+        for value in item_dict.values():
+            if ((value.item_type.lower() == user_list[1].lower()) and (datetime.strptime(value.date,'%m/%d/%Y')>d1) and (value.manfac_name.lower() != user_list[0].lower()) and (value.damage == '')):
+                similar_items.append(value)
+        # find item with closest price
+        closest_value = similar_items[min(range(len(similar_items)), key = lambda i: abs(similar_items[i].price-most_expensive.price))]
+        print('Similar Items: {}'.format(closest_value))
+
 
 
