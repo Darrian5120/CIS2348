@@ -96,13 +96,22 @@ if __name__ == "__main__":
             files.append(filename.format(finalized_items[i][2]))
             amt+=1
     
-    print(typeList)
-    print(files)
+    fullFiles = [[] for i in range(amt)]
 
-    for i in range(lines):
-        for j in range(amt):
-            if (finalized_items[i][2] == typeList[j]):
-                None
+    for i in range(amt):
+        for j in range(lines):
+            if (typeList[i] == finalized_items[j][2]):
+                fullFiles[i].append(finalized_items[j])
+    
+    
+    for i in range(amt):
+        fullFiles[i] = sorted(fullFiles[i], key=lambda l:l[0], reverse=False)
+        with open(files[i], 'w', newline='') as f:
+            write = csv.writer(f)
+            write.writerows(fullFiles[i])
+
+
+
 
 
 
